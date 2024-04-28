@@ -11,11 +11,11 @@ import (
 )
 
 func main() {
-	println("welcome to my nook the internet")
+	println("welcome to my nook of the internet")
 
 	e := echo.New()
 	routing.SetupRouter(e)
-	e.Static("/static", "static")
+	e.Static("/dist", "dist")
 
 	template.NewTemplateRenderer(e, []string{
 		"public/*.html",
