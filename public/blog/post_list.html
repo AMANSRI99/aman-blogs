@@ -1,0 +1,40 @@
+<!-- public/blog/post_list.html -->
+{{define "post_list"}}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {{range .posts}}
+    <article class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+        <h3 class="text-xl font-semibold mb-2">
+            <a href="/blog/posts/{{.ID}}" class="text-blue-600 hover:text-blue-800">{{.Title}}</a>
+        </h3>
+        <div class="text-sm text-gray-500 mb-4">
+            Posted on {{.CreatedAt.Format "January 2, 2006"}}
+        </div>
+        <p class="text-gray-600 mb-4">{{.Description}}</p>
+        <div class="flex justify-between items-center">
+            <div class="flex gap-2">
+                {{range .Tags}}
+                <span class="px-2 py-1 bg-gray-100 rounded-full text-sm text-gray-600">{{.}}</span>
+                {{end}}
+            </div>
+            <a href="/blog/posts/{{.ID}}" class="text-blue-600 hover:text-blue-800">Read more →</a>
+        </div>
+    </article>
+    {{end}}
+</div>
+
+<!-- Pagination -->
+<div class="mt-8 flex justify-center gap-2">
+    {{if gt .page 1}}
+    <button hx-get="/blog/posts?page={{subtract .page 1}}" 
+            hx-target="#post-list"
+            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+        Previous
+    </button>
+    {{end}}
+    <button hx-get="/blog/posts?page={{add .page 1}}"
+            hx-target="#post-list"
+            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+        Next
+    </button>
+</div>
+{{end}}

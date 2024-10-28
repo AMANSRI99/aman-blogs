@@ -1,12 +1,25 @@
 {{define "index"}}
-
 <head>
     {{template "head_tags" .}}
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link href="/dist/main.css" rel="stylesheet">
 </head>
 
-<body>
-    <h1> Welcome to my nook of the internet</h1>
-    <p> {{.}} </p>
-</body>
+<body class="bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Header Section -->
+        <header class="mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Welcome to my nook of the internet</h1>
+            <p class="text-lg text-gray-600">Here you'll find my thoughts, projects, and experiences.</p>
+        </header>
 
+        <!-- Blog Posts Section -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold mb-6">Latest Posts</h2>
+            <div hx-get="/blog/posts" hx-trigger="load" hx-swap="innerHTML">
+                <p>Loading posts...</p>
+            </div>
+        </section>
+    </div>
+</body>
 {{end}}

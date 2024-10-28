@@ -1,0 +1,34 @@
+<!-- public/post.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }} - Your Blog</title>
+    <link href="/dist/main.css" rel="stylesheet">
+    <script src="/dist/htmx.min.js"></script>
+</head>
+<body>
+    <article class="max-w-4xl mx-auto px-4 py-8">
+        <header class="mb-8">
+            <h1 class="text-4xl font-bold mb-4">{{ .Title }}</h1>
+            <div class="text-gray-600">
+                Published on {{ .CreatedAt.Format "January 2, 2006" }}
+                · {{ .ReadTime }} min read
+            </div>
+        </header>
+        
+        <div class="prose lg:prose-xl">
+            {{ .EncodedContent }}
+        </div>
+        
+        <!-- Add HTMX-powered related posts -->
+        <div class="mt-12"
+             hx-get="/api/related-posts/{{ .ID }}"
+             hx-trigger="load"
+             hx-swap="innerHTML">
+            <p>Loading related posts...</p>
+        </div>
+    </article>
+</body>
+</html>

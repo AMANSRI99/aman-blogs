@@ -3,11 +3,14 @@ module github.com/AMANSRI99/aman-blogs
 go 1.19
 
 require (
+	github.com/gosimple/slug v1.14.0
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.12.0
+	github.com/lib/pq v1.10.9
 )
 
 require (
+	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/pgx/v5 v5.4.3 // indirect

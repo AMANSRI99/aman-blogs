@@ -2,7 +2,6 @@ package db
 
 import (
 	"fmt"
-	"log"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -17,12 +16,6 @@ func init() {
 		panic(err)
 	}
 	database = db
-	// Perform a simple query to validate the connection
-	if err := db.Raw("SELECT 1").Scan(&struct{}{}).Error; err != nil {
-		panic(fmt.Errorf("failed to ping database: %w", err))
-	}
-
-	log.Println("Database connection established successfully")
 }
 
 func GetDatabase() *gorm.DB {
