@@ -25,8 +25,7 @@ func main() {
 		"public/*.html",
 		"public/admin/views/*.html",
 		"public/admin/components/*.html",
-		"public/blog/*.html",            // Add blog templates
-		"public/blog/components/*.html", // Add blog components
+		"public/blog/*.html", // Add blog templates
 	)
 	// Initialize repository
 	postRepo := repository.NewPostRepository(db.GetDatabase())
@@ -37,7 +36,8 @@ func main() {
 	})
 
 	// Blog routes
-	blogHandler := public.NewBlogHandler(postRepo)
+	blogHandler := public.NewBlogHandler(postRepo) // This creates a handler that will manage blog-related operations
+	// It gets postRepo so it can perform database operations
 	blogGroup := e.Group("/blog") // This creates /blog/* routes
 	blogHandler.Register(blogGroup)
 
