@@ -1,6 +1,9 @@
 package admin
 
 import (
+	"fmt"
+	"net/http"
+
 	"github.com/AMANSRI99/aman-blogs/pkg/models"
 	"github.com/AMANSRI99/aman-blogs/utils/scopes"
 	"github.com/labstack/echo/v4"
@@ -29,10 +32,17 @@ func (fe *AdminFrontend) Index(c echo.Context) error {
 	)
 
 	if err != nil {
-		return err
+		fmt.Printf("Error fetching posts: %v\n", err)
+		return c.HTML(http.StatusInternalServerError, "Error loading posts")
 	}
+
+	//preparing to render template
 	resp := map[string]interface{}{
 		"Posts": posts,
 	}
-	return c.Render(200, "admin_index", resp)
+	if err := c.Render(200, "admin_index", resp); err != nil {
+		fmt.Printf("Error rendering template: %v\n", err)
+		return c.HTML(http.StatusInternalServerError, "Error rendering page")
+	}
+	return nil
 }
