@@ -39,6 +39,7 @@ type PostRepository interface {
 	GetByTag(ctx context.Context, tag string, page int, pageSize int) ([]Post, error)
 	GetRelatedPosts(ctx context.Context, postID uint, limit int) ([]Post, error)
 	GetPostCount(ctx context.Context, status *PostStatus, tag *string) (int64, error)
+	GetBySlug(ctx context.Context, slug string) (*Post, error)
 }
 
 // Post methods
