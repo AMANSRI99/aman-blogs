@@ -1,4 +1,3 @@
-// pkg/public/blog_handler.go
 package public
 
 import (
@@ -6,8 +5,12 @@ import (
 	"strconv"
 
 	"github.com/AMANSRI99/aman-blogs/pkg/models"
-	"github.com/AMANSRI99/aman-blogs/utils/scopes"
 	"github.com/labstack/echo/v4"
+)
+
+const (
+	defaultPageSize = 10
+	defaultOrder    = "created_at"
 )
 
 type BlogHandler struct {
@@ -20,7 +23,6 @@ func NewBlogHandler(postRepo models.PostRepository) *BlogHandler {
 	}
 }
 
-// Register registers all blog routes
 func (h *BlogHandler) Register(g *echo.Group) {
 	g.GET("/posts", h.GetPosts)
 	g.GET("/posts/:slug", h.GetPost)
@@ -28,66 +30,149 @@ func (h *BlogHandler) Register(g *echo.Group) {
 	g.GET("/posts/tag/:tag", h.GetPostsByTag)
 }
 
-// pkg/public/blog_handler.go
 func (h *BlogHandler) GetPosts(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	// Convert page parameter from string to int
+	// Parse page number
 	page, err := strconv.Atoi(c.QueryParam("page"))
-	if err != nil {
-		page = 1 // Default to first page if invalid or not provided
+	if err != nil || page < 1 {
+		page = 1
 	}
 
-	posts, err := h.postRepo.Get(
+	// Get posts
+	posts, err := h.postRepo.GetByStatus(
 		ctx,
-		page,                      // page
-		10,                        // pageSize
-		"created_at",              // orderBy
-		string(scopes.Descending), // orderDir
+		models.Published,
+		page,
+		defaultPageSize,
 	)
-
 	if err != nil {
+		if c.Request().Header.Get("HX-Request") == "true" {
+			return c.HTML(http.StatusInternalServerError, "<p>Error loading posts</p>")
+		}
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"error": "Failed to fetch posts",
 		})
 	}
 
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"posts": posts,
-		"page":  page,
-	})
-}
-func (h *BlogHandler) GetPost(c echo.Context) error {
-	ctx := c.Request().Context()
-
-	// Convert id from string to uint
-	idStr := c.Param("id")
-	id64, err := strconv.ParseUint(idStr, 10, 32)
+	// Get total count for pagination
+	status := models.Published
+	total, err := h.postRepo.GetPostCount(ctx, &status, nil)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{
-			"error": "Invalid post ID",
+		return err
+	}
+
+	// If it's an HTMX request, render the post_list template
+	if c.Request().Header.Get("HX-Request") == "true" {
+		return c.Render(http.StatusOK, "post_list", map[string]interface{}{
+			"Posts":    posts,
+			"Page":     page,
+			"PageSize": defaultPageSize,
+			"Total":    total,
 		})
 	}
-	id := uint(id64)
 
-	post, err := h.postRepo.GetById(ctx, id)
+	// Otherwise return JSON (for API calls)
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"posts":    posts,
+		"page":     page,
+		"pageSize": defaultPageSize,
+		"total":    total,
+	})
+}
+
+func (h *BlogHandler) GetPost(c echo.Context) error {
+	ctx := c.Request().Context()
+	slug := c.Param("slug")
+
+	post, err := h.postRepo.GetBySlug(ctx, slug)
 	if err != nil {
-		return c.JSON(http.StatusNotFound, map[string]string{
-			"error": "Post not found",
+		return c.Render(http.StatusNotFound, "error", map[string]interface{}{
+			"Error": "Post not found",
 		})
+	}
+
+	// Get related posts
+	related, err := h.postRepo.GetRelatedPosts(ctx, post.ID, 3)
+	if err != nil {
+		related = []models.Post{} // Empty slice if error
 	}
 
 	return c.Render(http.StatusOK, "post", map[string]interface{}{
-		"post": post,
+		"Post":    post,
+		"Related": related,
 	})
 }
 
 func (h *BlogHandler) GetTags(c echo.Context) error {
-	// Implementation pending tag functionality
-	return c.JSON(http.StatusOK, []string{})
+	ctx := c.Request().Context()
+
+	// Get all published posts to extract tags
+	posts, err := h.postRepo.GetByStatus(ctx, models.Published, 1, 100)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to fetch tags",
+		})
+	}
+
+	// Collect unique tags
+	tagMap := make(map[string]int) // tag -> count
+	for _, post := range posts {
+		for _, tag := range post.Tags {
+			tagMap[tag]++
+		}
+	}
+
+	// Convert map to slice of structs
+	type TagCount struct {
+		Name  string `json:"name"`
+		Count int    `json:"count"`
+	}
+	tags := make([]TagCount, 0, len(tagMap))
+	for tag, count := range tagMap {
+		tags = append(tags, TagCount{Name: tag, Count: count})
+	}
+
+	return c.JSON(http.StatusOK, tags)
 }
 
 func (h *BlogHandler) GetPostsByTag(c echo.Context) error {
-	// Implementation pending tag functionality
-	return c.JSON(http.StatusOK, []string{})
+	ctx := c.Request().Context()
+	tag := c.Param("tag")
+
+	page, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	posts, err := h.postRepo.GetByTag(
+		ctx,
+		tag,
+		page,
+		defaultPageSize,
+	)
+	if err != nil {
+		if c.Request().Header.Get("HX-Request") == "true" {
+			return c.HTML(http.StatusInternalServerError, "<p>Error loading posts</p>")
+		}
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to fetch posts",
+		})
+	}
+
+	if c.Request().Header.Get("HX-Request") == "true" {
+		return c.Render(http.StatusOK, "post_list", map[string]interface{}{
+			"Posts":    posts,
+			"Page":     page,
+			"PageSize": defaultPageSize,
+			"Tag":      tag,
+		})
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"posts":    posts,
+		"page":     page,
+		"pageSize": defaultPageSize,
+		"tag":      tag,
+	})
 }
