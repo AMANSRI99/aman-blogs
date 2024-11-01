@@ -125,3 +125,20 @@ func (r *repository) GetPostCount(ctx context.Context, status *models.PostStatus
 	err := query.Count(&count).Error
 	return count, err
 }
+
+func (r *repository) GetBySlug(ctx context.Context, slug string) (*models.Post, error) {
+	var post models.Post // Create a post variable
+
+	err := r.db.WithContext(ctx).
+		Where("slug = ? AND status = ?", slug, models.Published).
+		First(&post).Error // GORM needs address to populate the struct
+
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil // Can return nil for not found
+		}
+		return nil, err
+	}
+
+	return &post, nil // Return pointer to the post
+}
