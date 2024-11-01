@@ -4,30 +4,82 @@
 
 <head>
     {{template "head_tags"}}
-    <title>Blog Admin</title>
+    <title>Create New Post - Blog Admin</title>
+    <!-- Add TinyMCE for better content editing -->
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (document.querySelector('#content')) {
+                tinymce.init({
+                    selector: '#content',
+                    plugins: 'link code lists',
+                    toolbar: 'undo redo | formatselect | bold italic | bullist numlist | link code',
+                    height: 400
+                });
+            }
+        });
+    </script>
 </head>
+
 <body id="admin-root">
     <div class="h-full w-full text-center flex-row select-none all:transition-400 ma">
         {{template "admin_header"}}
-    <br>
-    <div>
-        <form hx-post="/admin/posts/create" hx-target="#admin-content"
-        hx-swap="innerHTML">
-        <div>
-            <label>Title</label>
-          <br>
-            <input class="py-2 border border-2 border-black rounded-2 w-xl" type="text" name="title">
+        <br>
+        <div class="max-w-4xl mx-auto p-6">
+            <form hx-post="/admin/posts/create" 
+                  hx-target="#admin-content"
+                  hx-swap="innerHTML">
+                <!-- Title -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Title</label>
+                    <input class="py-2 px-3 border border-2 border-black rounded-2 w-full" 
+                           type="text" 
+                           name="title"
+                           required>
+                </div>
+
+                <!-- Content -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Content</label>
+                    <textarea id="content"
+                              class="border border-2 border-dotted border-black rounded-2 w-full h-64 p-3" 
+                              name="content"
+                              required></textarea>
+                </div>
+
+                <!-- Added: Tags -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Tags (comma separated)</label>
+                    <input class="py-2 px-3 border border-2 border-black rounded-2 w-full" 
+                           type="text" 
+                           name="tags"
+                           placeholder="tag1, tag2, tag3">
+                </div>
+
+                <!-- Added: Status -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Status</label>
+                    <select name="status" 
+                            class="py-2 px-3 border border-2 border-black rounded-2 w-full">
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-center gap-4">
+                    <button type="submit" 
+                            class="button bg-blue-600 p-3 my-3 rounded-4 drop-shadow-lg text-white px-10">
+                        Create Post
+                    </button>
+                    <button type="button"
+                            class="button bg-gray-600 p-3 my-3 rounded-4 drop-shadow-lg text-white px-10"
+                            hx-get="/admin/posts/new/cancel"
+                            hx-trigger="click">
+                        Cancel
+                    </button>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <label>Content</label>
-          <br>
-            <textarea class="border border-2 border-dotted border-black rounded-2 w-xl h-xs p-3" type="text" name="content"></textarea>
-        </div>
-        <button class="button bg-blue-600 p-3 my-3 rounded-4 drop-shadow-lg text-white px-10" class="btn">Submit</button>
-    </form>
-    <button class="button bg-blue-600 p-3 my-3 rounded-4 drop-shadow-lg text-white px-10" hx-get="/admin/posts/new/cancel"
-        hx-trigger="click">Cancel</button>
-    </div>
     </div>
 </body>
 
