@@ -31,7 +31,8 @@ func main() {
 		"public/*.html",
 		"public/admin/views/*.html",
 		"public/admin/components/*.html",
-		"public/blog/*.html", // Add blog templates
+		"public/blog/*.html",
+		"public/components/*.html",
 	)
 	// Initializing db connection
 	dbConnection := db.GetDatabase()

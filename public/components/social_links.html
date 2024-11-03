@@ -1,0 +1,42 @@
+<!-- Enhanced social_links.html -->
+{{define "social_links"}}
+<div class="flex space-x-6 justify-center items-center mt-6">
+    <a href="https://github.com/yourusername" 
+       target="_blank"
+       class="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-900 transform hover:scale-110 transition-all duration-300">
+        <i data-lucide="github" class="w-6 h-6"></i>
+        <span class="sr-only">GitHub</span>
+    </a>
+
+    <a href="https://linkedin.com/in/yourusername" 
+       target="_blank"
+       class="p-2 rounded-full hover:bg-blue-50 text-gray-600 hover:text-blue-600 transform hover:scale-110 transition-all duration-300">
+        <i data-lucide="linkedin" class="w-6 h-6"></i>
+        <span class="sr-only">LinkedIn</span>
+    </a>
+
+    <a href="https://twitter.com/yourusername" 
+       target="_blank"
+       class="p-2 rounded-full hover:bg-blue-50 text-gray-600 hover:text-blue-400 transform hover:scale-110 transition-all duration-300">
+        <i data-lucide="twitter" class="w-6 h-6"></i>
+        <span class="sr-only">Twitter</span>
+    </a>
+
+    <a href="https://leetcode.com/yourusername" 
+       target="_blank"
+       class="p-2 rounded-full hover:bg-yellow-50 text-gray-600 hover:text-yellow-600 transform hover:scale-110 transition-all duration-300">
+        <i data-lucide="code" class="w-6 h-6"></i>
+        <span class="sr-only">LeetCode</span>
+    </a>
+
+    <a href="mailto:your.email@example.com" 
+       class="p-2 rounded-full hover:bg-red-50 text-gray-600 hover:text-red-600 transform hover:scale-110 transition-all duration-300">
+        <i data-lucide="mail" class="w-6 h-6"></i>
+        <span class="sr-only">Email</span>
+    </a>
+</div>
+
+<script>
+    lucide.createIcons();
+</script>
+{{end}}
