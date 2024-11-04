@@ -7,35 +7,47 @@
 
 <body class="bg-slate-900 leading-relaxed text-slate-400 antialiased overflow-x-hidden">
     <div class="max-w-5xl mx-auto px-4 pt-4">
-        <div class="grid grid-cols-2 gap-4">
+        <!-- Intro Section -->
+        <div class="grid grid-cols-2 gap-4 mb-16"> <!-- Added margin bottom -->
             <!-- Left Column -->
             <div>
                 <div class="w-32 h-32 rounded-full overflow-hidden mb-6">
                     <img src="/images/pic.jpg" alt="Diwali@couchbase" class="w-full h-full object-cover">
                 </div>
                 
-                <h1 class="text-3xl font-bold text-white mb-1">Aman Srivastava</h1>
-                <p class="text-sm text-gray-500 mb-4">Welcome to my nook of the internet!</p>
+                <h1 class="text-3xl font-bold text-white mb-1">Your Name</h1>
+                <p class="text-sm text-gray-500 mb-4">Backend Developer | Go Enthusiast</p>
                 
-                <!-- Added social links back -->
                 {{template "social_links" .}}
             </div>
 
             <!-- Right Column -->
             <div class="pt-2">
                 <p class="text-base leading-relaxed text-gray-400 mb-4">
-                    Hi, I am an engineer, a sports enthusisasts and wannabe philosopher. I am currently working as software Engineer at Couchbase. I am interested in distributed systems and systems programming in general. Golang and C++ are my language of choice and trying to learn rust these days. I keep documenting my experiences and learnings through blogs and you can find the same here. Please feel free to connect :) Would love to engage with like minded people digitally or over a cup of coffee!
+                    Back in 2023, I started my journey into software development. Now, I focus on building robust backend systems and sharing my experiences through writing.
                 </p>
 
                 <h2 class="text-base mb-2">Here you'll find:</h2>
 
                 <ul class="text-sm space-y-2 text-gray-400">
-                    <li>Technical blog posts about Systems engineering, distributed systems, backend development, and system design</li>
+                    <li>Technical blog posts about Go, backend development, and system design</li>
                     <li>My projects and their case studies</li>
                     <li>Thoughts on software engineering practices</li>
                 </ul>
             </div>
         </div>
+
+        <!-- Blog Section -->
+        <section class="mt-8">
+            <h2 class="text-2xl font-bold text-white mb-6">Latest Posts</h2>
+            
+            <div class="space-y-8">
+                <!-- Blog posts will be loaded here -->
+                <div id="posts-list" hx-get="/blog/posts" hx-trigger="load" class="space-y-8">
+                    <p>Loading posts...</p>
+                </div>
+            </div>
+        </section>
     </div>
 </body>
 {{end}}

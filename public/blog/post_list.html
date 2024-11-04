@@ -3,30 +3,30 @@
 {{if .Posts}}
 <div id="post-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
     {{range .Posts}}
-    <article class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+    <article class="bg-slate-800/50 rounded-lg p-6 hover:bg-slate-800 transition-all"> <!-- Changed colors -->
         <h3 class="text-xl font-semibold mb-2">
-            <a href="/blog/posts/{{.ID}}" class="text-blue-600 hover:text-blue-800">
+            <a href="/blog/posts/{{.ID}}" class="text-slate-200 hover:text-teal-300"> <!-- Changed colors -->
                 {{if .Title}}{{.Title}}{{else}}Untitled Post{{end}}
             </a>
         </h3>
-        <div class="text-sm text-gray-500 mb-4">
+        <div class="text-sm text-slate-400 mb-4"> <!-- Changed color -->
             {{if .CreatedAt}}
                 Posted on {{.CreatedAt.Format "January 2, 2006"}}
             {{end}}
         </div>
         {{if .Description}}
-            <p class="text-gray-600 mb-4">{{.Description}}</p>
+            <p class="text-slate-400 mb-4">{{.Description}}</p> <!-- Changed color -->
         {{end}}
         <div class="flex justify-between items-center">
             {{if .Tags}}
             <div class="flex flex-wrap gap-2">
                 {{range .Tags}}
-                <span class="px-2 py-1 bg-gray-100 rounded-full text-sm text-gray-600">{{.}}</span>
+                <span class="px-2 py-1 bg-slate-700 rounded-full text-sm text-slate-300">{{.}}</span> <!-- Changed colors -->
                 {{end}}
             </div>
             {{end}}
             <a href="/blog/posts/{{.ID}}" 
-               class="inline-flex items-center text-blue-600 hover:text-blue-800">
+               class="inline-flex items-center text-slate-200 hover:text-teal-300"> <!-- Changed colors -->
                 Read more 
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -44,7 +44,7 @@
     <button hx-get="/blog/posts?page={{subtract .Page 1}}" 
             hx-target="#post-list"
             hx-swap="outerHTML"
-            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+            class="px-4 py-2 bg-slate-700 text-slate-200 rounded hover:bg-slate-600 transition-colors"> <!-- Changed colors -->
         Previous
     </button>
     {{end}}
@@ -52,7 +52,7 @@
     <button hx-get="/blog/posts?page={{add .Page 1}}"
             hx-target="#post-list"
             hx-swap="outerHTML"
-            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+            class="px-4 py-2 bg-slate-700 text-slate-200 rounded hover:bg-slate-600 transition-colors"> <!-- Changed colors -->
         Next
     </button>
     {{end}}
@@ -62,7 +62,7 @@
 <!-- Empty state -->
 {{else}}
 <div class="text-center py-12">
-    <p class="text-gray-600">No posts found.</p>
+    <p class="text-slate-400">No posts found.</p> <!-- Changed color -->
 </div>
 {{end}}
 {{end}}
