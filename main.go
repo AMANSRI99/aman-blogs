@@ -26,6 +26,7 @@ func main() {
 
 	routing.SetupRouter(e)
 	e.Static("/dist", "dist")
+	e.Static("/images", "public/images")
 
 	template.NewTemplateRenderer(e,
 		"public/*.html",

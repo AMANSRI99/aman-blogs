@@ -5,24 +5,37 @@
     <link href="/dist/main.css" rel="stylesheet">
 </head>
 
-<body class="bg-gray-50">
-    <div class="max-w-6xl mx-auto px-4 py-8">
-        <!-- Header Section -->
-        <header class="mb-12">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">Welcome to my nook of the internet</h1>
-            <p class="text-lg text-gray-600">Here you'll find my thoughts, projects, and experiences.</p>
-
-             <!-- Include social links -->
-             {{template "social_links" .}}
-        </header>
-
-        <!-- Blog Posts Section -->
-        <section class="mb-12">
-            <h2 class="text-2xl font-semibold mb-6">Latest Posts</h2>
-            <div hx-get="/blog/posts" hx-trigger="load" hx-swap="innerHTML">
-                <p>Loading posts...</p>
+<body class="bg-slate-900 leading-relaxed text-slate-400 antialiased overflow-x-hidden">
+    <div class="max-w-5xl mx-auto px-4 pt-4">
+        <div class="grid grid-cols-2 gap-4">
+            <!-- Left Column -->
+            <div>
+                <div class="w-32 h-32 rounded-full overflow-hidden mb-6">
+                    <img src="/images/pic.jpg" alt="Diwali@couchbase" class="w-full h-full object-cover">
+                </div>
+                
+                <h1 class="text-3xl font-bold text-white mb-1">Aman Srivastava</h1>
+                <p class="text-sm text-gray-500 mb-4">Welcome to my nook of the internet!</p>
+                
+                <!-- Added social links back -->
+                {{template "social_links" .}}
             </div>
-        </section>
+
+            <!-- Right Column -->
+            <div class="pt-2">
+                <p class="text-base leading-relaxed text-gray-400 mb-4">
+                    Hi, I am an engineer, a sports enthusisasts and wannabe philosopher. I am currently working as software Engineer at Couchbase. I am interested in distributed systems and systems programming in general. Golang and C++ are my language of choice and trying to learn rust these days. I keep documenting my experiences and learnings through blogs and you can find the same here. Please feel free to connect :) Would love to engage with like minded people digitally or over a cup of coffee!
+                </p>
+
+                <h2 class="text-base mb-2">Here you'll find:</h2>
+
+                <ul class="text-sm space-y-2 text-gray-400">
+                    <li>Technical blog posts about Systems engineering, distributed systems, backend development, and system design</li>
+                    <li>My projects and their case studies</li>
+                    <li>Thoughts on software engineering practices</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </body>
 {{end}}
