@@ -2,10 +2,12 @@ package repository
 
 import (
 	"context"
+	"log"
 
 	"github.com/AMANSRI99/aman-blogs/pkg/models"
 	"github.com/AMANSRI99/aman-blogs/utils/scopes"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type repository struct {
@@ -59,14 +61,24 @@ func (r *repository) GetByStatus(ctx context.Context, status models.PostStatus, 
 		OrderDirection: scopes.Descending,
 	}
 
-	err := r.db.WithContext(ctx).
-		Where("status = ?", status).
+	db := r.db.Session(&gorm.Session{
+		PrepareStmt: false,
+		Logger:      r.db.Logger.LogMode(logger.Info),
+	}).WithContext(ctx)
+
+	// Log the query being executed
+	log.Printf("Executing GetByStatus query with status: %s, page: %d, pageSize: %d", status, page, pageSize)
+
+	err := db.Where("status = ?", string(status)).
 		Scopes(scopes.Apply(opts)).
 		Find(&res).Error
 
 	if err != nil {
+		log.Printf("Error in GetByStatus: %v", err)
 		return nil, err
 	}
+
+	log.Printf("Found %d posts", len(res))
 	return res, nil
 }
 

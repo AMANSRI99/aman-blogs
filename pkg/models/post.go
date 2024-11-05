@@ -6,7 +6,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/gosimple/slug" // Add this for slug generation
+	"github.com/gosimple/slug"
 	"github.com/lib/pq"
 	"gorm.io/gorm"
 )
@@ -16,7 +16,7 @@ type Post struct {
 	Title          string
 	Content        string
 	EncodedContent string
-	Status         PostStatus
+	Status         PostStatus          `gorm:"type:string;default:'draft'"` // Explicitly specifying type
 	FormMeta       map[string]FormMeta `gorm:"-"`
 	Slug           string              `gorm:"uniqueIndex"`
 	Description    string
