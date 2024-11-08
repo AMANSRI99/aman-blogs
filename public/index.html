@@ -3,47 +3,70 @@
     {{template "head_tags" .}}
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <link href="/dist/main.css" rel="stylesheet">
+    <link href="/dist/theme-toggle.css" rel="stylesheet">
+    <script src="/dist/theme-toggle.js"></script>
 </head>
 
-<body class="bg-slate-900 leading-relaxed text-slate-400 antialiased overflow-x-hidden">
+<body class="bg-slate-900 dark:bg-white leading-relaxed text-slate-400 dark:text-slate-600 antialiased overflow-x-hidden">
+    <button class="theme-toggle" id="theme-toggle" title="Toggles light & dark" aria-label="auto" aria-live="polite">
+        <svg class="sun-and-moon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
+            <mask class="moon" id="moon-mask">
+                <rect x="0" y="0" width="100%" height="100%" fill="white" />
+                <circle cx="24" cy="10" r="6" fill="black" />
+            </mask>
+            <circle class="sun" cx="12" cy="12" r="6" mask="url(#moon-mask)" fill="currentColor" />
+            <g class="sun-beams" stroke="currentColor">
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </g>
+        </svg>
+    </button>
+
     <div class="max-w-5xl mx-auto px-4 pt-4">
-        <!-- Intro Section -->
-        <div class="grid grid-cols-2 gap-4 mb-16"> <!-- Added margin bottom -->
+        <div class="grid grid-cols-2 gap-4 mb-16">
             <!-- Left Column -->
             <div>
                 <div class="w-32 h-32 rounded-full overflow-hidden mb-6">
                     <img src="/images/pic.jpg" alt="Diwali@couchbase" class="w-full h-full object-cover">
                 </div>
                 
-                <h1 class="text-3xl font-bold text-white mb-1">Aman Srivastava</h1>
-                <p class="text-sm text-gray-500 mb-4">Backend Developer | Systems Enthusiast</p>
+                <h1 class="text-3xl font-bold text-white dark:text-slate-800 mb-1">Aman Srivastava</h1>
+                <p class="text-sm text-gray-500 dark:text-slate-600 mb-4">Backend Developer | Systems Enthusiast</p>
                 
-                {{template "social_links" .}}
+                <div class="text-gray-400 dark:text-slate-600">
+                    {{template "social_links" .}}
+                </div>
             </div>
 
             <!-- Right Column -->
             <div class="pt-2">
-                <p class="text-xs leading-normal text-gray-400 mb-2">
+                <p class="text-xs leading-normal text-gray-400 dark:text-slate-600 mb-2">
                     Hi, I am an engineer, a sports enthusiast, and wannabe philosopher. I am currently working as a Software Engineer at Couchbase. I am interested in distributed systems and systems programming in general. Golang and C++ are my languages of choice, and I'm trying to learn Rust these days. I keep documenting my experiences and learnings through blogs, and you can find them here. Please feel free to connect :) Would love to engage with like-minded people digitally or over a cup of coffee!
                 </p>
             
-                <h2 class="text-xs mb-2">Here you'll find:</h2>
+                <h2 class="text-xs text-white dark:text-slate-800 mb-2">Here you'll find:</h2>
             
-                <ul class="text-[11px] space-y-1 text-gray-400"> <!-- Using text-[11px] for even smaller text -->
+                <ul class="text-[11px] space-y-1 text-gray-400 dark:text-slate-600">
                     <li>Technical blog posts about Go, backend development, and system design</li>
                     <li>My projects and their case studies</li>
                     <li>Thoughts on software engineering practices</li>
                 </ul>
             </div>          
         </div>
+
         <!-- Blog Section -->
         <section class="mt-8">
-            <h2 class="text-2xl font-bold text-white mb-6">Latest Posts</h2>
+            <h2 class="text-2xl font-bold text-white dark:text-slate-800 mb-6">Latest Posts</h2>
             
             <div class="space-y-8">
-                <!-- Blog posts will be loaded here -->
                 <div id="posts-list" hx-get="/blog/posts" hx-trigger="load" class="space-y-8">
-                    <p>Loading posts...</p>
+                    <p class="text-gray-400 dark:text-slate-600">Loading posts...</p>
                 </div>
             </div>
         </section>
