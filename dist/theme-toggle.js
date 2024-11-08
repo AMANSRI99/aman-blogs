@@ -12,16 +12,16 @@ window.onload = function() {
     function reflectPreference() {
         document.firstElementChild.setAttribute('data-theme', theme.value);
         document.querySelector('#theme-toggle')?.setAttribute('aria-label', theme.value);
-        
-        // Add these lines to update the actual theme
-        if (theme.value === 'dark') {
+
+        // Toggle dark class on html element
+        if (theme.value === 'light') {
             document.documentElement.classList.add('dark');
-            document.body.classList.remove('bg-white');
-            document.body.classList.add('bg-slate-900');
+            document.body.classList.remove('bg-slate-900');
+            document.body.classList.add('bg-white');
         } else {
             document.documentElement.classList.remove('dark');
-            document.body.classList.add('bg-white');
-            document.body.classList.remove('bg-slate-900');
+            document.body.classList.add('bg-slate-900');
+            document.body.classList.remove('bg-white');
         }
     }
 
